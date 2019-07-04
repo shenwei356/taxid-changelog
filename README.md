@@ -55,10 +55,10 @@ Some findings based on parts of archives (2014-2015)
 - Lineage changed but lineage taxids remained the same, 
   due to scientific name changes in parts of taxids of higher ranks.
 
-        $ pigz -cd taxid-changelog.csv.gz | csvtk grep -f taxid -p 135634
-        taxid,version,change,change-value,name,rank,lineage,lineage-taxids
-        135634,2014-08-01,NEW,,Streptopelia capicola,species,cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola,131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
-        135634,2015-01-01,LINEAGE_CHANGED,,Streptopelia capicola,species,cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola,131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
+        $ pigz -cd taxid-changelog.csv.gz | csvtk grep -f taxid -p 135634 | csvtk pretty
+        taxid    version      change            change-value   name                    rank      lineage                                                                                                                                                                                                                                                                                                                                                                                              lineage-taxids
+        135634   2014-08-01   NEW                              Streptopelia capicola   species   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
+        135634   2015-01-01   LINEAGE_CHANGED                  Streptopelia capicola   species   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
 
 - Deleted taxid were re-used, e.g., `7343`
 
@@ -70,7 +70,8 @@ Some findings based on parts of archives (2014-2015)
         7343    2014-08-01   DELETE                                      
         7343    2015-04-01   NEW                     Paraliodrosophila   genus
 
-        # how many delted taxids were re-used
+        
+        # how many deleted taxids were re-used
         $ pigz -cd taxid-changelog.csv.gz \
             | csvtk collapse -f taxid -v change -s ";" \
             | csvtk grep -f change -r -p ".*DELETE.*NEW" \
