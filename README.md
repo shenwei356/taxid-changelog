@@ -35,7 +35,7 @@ File format (CSV format with 8 fields):
     lineage         # full lineage of the taxid
     lineage-taxids  # taxids of the lineage
 
-Example
+Example 1:
 
     $ gzip -dc taxid-changelog.csv.gz | head -n 11
     taxid,version,change,change-value,name,rank,lineage,lineage-taxids
@@ -50,6 +50,26 @@ Example
     8,2014-08-01,DELETE,,,,,
     9,2014-08-01,NEW,,Buchnera aphidicola,species,cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Buchnera;Buchnera aphidicola,131567;2;1224;1236;91347;543;32199;9
 
+Example 2 (*E.coli* with taxid `562`)
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -p 562 \
+        | csvtk pretty
+    taxid   version      change   change-value    name               rank      lineage                                                                                                                            lineage-taxids
+    562     2014-08-01   NEW                      Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+    562     2014-08-01   ABSORB   662101;662104   Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+    562     2015-11-01   ABSORB   1637691         Escherichia coli   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia coli   131567;2;1224;1236;91347;543;561;562
+    
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -p 662101,662104,1637691 \
+        | csvtk pretty
+    taxid     version      change   change-value   name                  rank      lineage                                                                                                                               lineage-taxids
+    662101    2014-08-01   MERGE    562                                                                                                                                                                                  
+    662104    2014-08-01   MERGE    562                                                                                                                                                                                  
+    1637691   2015-04-01   DELETE                                                                                                                                                                                        
+    1637691   2015-05-01   NEW                     Escherichia sp. MAR   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR   131567;2;1224;1236;91347;543;561;1637691
+    1637691   2015-11-01   MERGE    562            Escherichia sp. MAR   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR   131567;2;1224;1236;91347;543;561;1637691
+        
 ## Results
 
 Tools:
@@ -84,7 +104,7 @@ Some findings based on parts of archives (2014-2015).
         8492    2014-08-01   NEW                           Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
         8492    2015-01-01   L_CHANGE_LIN                  Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
 
-- Lots of taxids were deleted
+- Lots of taxids were deleted.
 
         $ pigz -cd taxid-changelog.csv.gz \
             | csvtk grep -f change -p DELETE \
@@ -109,7 +129,7 @@ Some findings based on parts of archives (2014-2015).
         2015-11-01   12168
         2015-12-01   9781
 
-- **Deleted taxid can be re-used**, e.g., `7343`
+- **Deleted taxid can be re-used**, e.g., `7343`.
 
         $ pigz -cd taxid-changelog.csv.gz \
             | csvtk grep -f taxid -p 7343 \
@@ -131,44 +151,21 @@ Some findings based on parts of archives (2014-2015).
             | csvtk collapse -f taxid -v change -s ";" \
             | csvtk grep -f change -r -p ".*DELETE.*NEW" \
             | csvtk freq -f change -nr \
-            | csvtk pretty
-        change                                              frequency
-        DELETE;NEW                                          129998
-        DELETE;NEW;L_CHANGE_LEN                             5370
-        DELETE;NEW;L_CHANGE_TAX                             1409
-        DELETE;NEW;L_CHANGE_LIN                             844
-        DELETE;NEW;ABSORB                                   730
-        DELETE;NEW;MERGE                                    320
-        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LEN                50
-        DELETE;NEW;ABSORB;L_CHANGE_LIN                      47
-        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_LEN                39
-        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_TAX                32
-        DELETE;NEW;ABSORB;L_CHANGE_LEN                      22
-        DELETE;NEW;ABSORB;L_CHANGE_TAX                      21
-        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LIN                14
-        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LIN;L_CHANGE_LEN   12
-        DELETE;NEW;L_CHANGE_LIN;ABSORB                      12
-        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LIN                11
-        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_TAX                7
-        DELETE;NEW;L_CHANGE_LEN;MERGE                       6
-        DELETE;NEW;ABSORB;L_CHANGE_LIN;MERGE                3
-        DELETE;NEW;L_CHANGE_LEN;ABSORB                      3
-        DELETE;NEW;L_CHANGE_TAX;ABSORB;L_CHANGE_TAX         3
-        DELETE;NEW;L_CHANGE_TAX;MERGE                       3
-        DELETE;NEW;ABSORB;MERGE                             2
-        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_LIN                2
-        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_TAX                2
-        DELETE;NEW;L_CHANGE_LIN;MERGE                       2
-        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LEN                2
-        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LIN;L_CHANGE_TAX   2
-        DELETE;NEW;ABSORB;L_CHANGE_LIN;L_CHANGE_LEN         1
-        DELETE;NEW;ABSORB;L_CHANGE_LIN;L_CHANGE_TAX         1
-        DELETE;NEW;L_CHANGE_LEN;ABSORB;L_CHANGE_LIN         1
-        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LEN;L_CHANGE_LEN   1
-        DELETE;NEW;L_CHANGE_TAX;ABSORB                      1
+            | csvtk head -n 10 \
+            | csvtk pretty            
+        change                                 frequency
+        DELETE;NEW                             129998
+        DELETE;NEW;L_CHANGE_LEN                5370
+        DELETE;NEW;L_CHANGE_TAX                1409
+        DELETE;NEW;L_CHANGE_LIN                844
+        DELETE;NEW;ABSORB                      681
+        DELETE;NEW;MERGE                       320
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LEN   50
+        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_LEN   39
+        DELETE;NEW;ABSORB;ABSORB               36
+        DELETE;NEW;ABSORB;L_CHANGE_LIN         32
 
-
-to be investigated ...
+to be continue ...
         
 ## Method
 
