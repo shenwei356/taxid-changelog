@@ -65,15 +65,15 @@ Example 2 (*E.coli* with taxid `562`)
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f taxid -p 662101,662104,1637691,469598 \
         | csvtk pretty
-        taxid     version      change         change-value   name                        rank      lineage                                                                                                                                     lineage-taxids
-        469598    2014-08-01   NEW                           Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA   131567;2;1224;1236;91347;543;561;469598
-        469598    2016-10-01   L_CHANGE_LIN                  Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
-        469598    2018-06-01   MERGE          562            Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
-        662101    2014-08-01   MERGE          562                                                                                                                                                                                              
-        662104    2014-08-01   MERGE          562                                                                                                                                                                                              
-        1637691   2015-04-01   DELETE                                                                                                                                                                                                          
-        1637691   2015-05-01   NEW                           Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
-        1637691   2015-11-01   MERGE          562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691  
+    taxid     version      change         change-value   name                        rank      lineage                                                                                                                                     lineage-taxids
+    469598    2014-08-01   NEW                           Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA   131567;2;1224;1236;91347;543;561;469598
+    469598    2016-10-01   L_CHANGE_LIN                  Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+    469598    2018-06-01   MERGE          562            Escherichia sp. 3_2_53FAA   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacterales;Enterobacteriaceae;Escherichia;Escherichia sp. 3_2_53FAA    131567;2;1224;1236;91347;543;561;469598
+    662101    2014-08-01   MERGE          562                                                                                                                                                                                              
+    662104    2014-08-01   MERGE          562                                                                                                                                                                                              
+    1637691   2015-04-01   DELETE                                                                                                                                                                                                          
+    1637691   2015-05-01   NEW                           Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
+    1637691   2015-11-01   MERGE          562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691  
 
 ## Results
 
