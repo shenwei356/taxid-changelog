@@ -2,9 +2,12 @@
 
 NCBI taxonomic identifier (taxid) changelog
 
-## Data source
 
-https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
+- [Download](#download)
+- [Results](#results)
+- [Method](#Method)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Download
 
@@ -15,11 +18,18 @@ File format (CSV format with 8 fields):
     # fields        comments
     taxid           # taxid
     version         # version / time of archive, e.g, 2019-07-01
-    change          # change, values: NEW, DELETE, LINEAGE_CHANGED, MERGE, ABSORB
+    change          # change, values:
+                    #   NEW             newly added
+                    #   DELETE          deleted
+                    #   MERGE           merged into another taxid
+                    #   ABSORB          other taxids merged into this one
+                    #   L_CHANGE_LIN    lineage taxids remain but lineage remain
+                    #   L_CHANGE_TAX    lineage taxids changed
+                    #   L_CHANGE_LEN    lineage length changed
     change-value    # variable values for changes: 
-                    #    1) empty for NEW, DELETE, LINEAGE_CHANGED
-                    #    2) new taxid for MERGE,
-                    #    3) merged taxids for ABSORB
+                    #   1) empty for NEW, DELETE, L_CHANGE_LIN, L_CHANGE_TAX, L_CHANGE_LEN
+                    #   2) new taxid for MERGE,
+                    #   3) merged taxids for ABSORB
     name            # scientific name
     rank            # rank
     lineage         # full lineage of the taxid
@@ -42,25 +52,64 @@ Example
 
 ## Results
 
-Some findings based on parts of archives (2014-2015)
+Tools:
+- [csvtk](https://github.com/shenwei356/csvtk).
+- [`pigz`](https://zlib.net/pigz/) can be replaced by `gzip`.
+
+Some findings based on parts of archives (2014-2015).
 
 - Scientific names can change, obviously.
 
-        $ pigz -cd taxid-changelog.csv.gz | csvtk grep -f taxid -p 1329799 \
-            | csvtk cut -f -lineage,-lineage-taxids | csvtk pretty 
-        taxid     version      change            change-value   name                             rank
-        1329799   2014-08-01   NEW                              Testudines + Archosauria group   no rank
-        1329799   2015-01-01   LINEAGE_CHANGED                  Archelosauria                    no rank
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -p 11 -p 152 \
+            | csvtk cut -f -lineage,-lineage-taxids \
+            | csvtk pretty 
+        taxid   version      change         change-value        name                      rank
+        11      2014-08-01   NEW                                [Cellvibrio] gilvus       species
+        11      2015-05-01   L_CHANGE_LEN                       [Cellvibrio] gilvus       species
+        11      2015-11-01   L_CHANGE_LIN                       Cellulomonas gilvus       species
+        152     2014-08-01   NEW                                Treponema stenostrepta    species
+        152     2015-06-01   L_CHANGE_LIN                       Treponema stenostreptum   species
+                
 
-- Lineage changed but lineage taxids remained the same, 
-  due to scientific name changes in parts of taxids of higher ranks.
+- Lineage changed but lineage taxids can remained the same, 
+  due to scientific name changes in parts of taxids of itself (`730`) or higher ranks (`8492`).
 
-        $ pigz -cd taxid-changelog.csv.gz | csvtk grep -f taxid -p 135634 | csvtk pretty
-        taxid    version      change            change-value   name                    rank      lineage                                                                                                                                                                                                                                                                                                                                                                                              lineage-taxids
-        135634   2014-08-01   NEW                              Streptopelia capicola   species   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
-        135634   2015-01-01   LINEAGE_CHANGED                  Streptopelia capicola   species   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria;Dinosauria;Saurischia;Theropoda;Coelurosauria;Aves;Neognathae;Columbiformes;Columbidae;Streptopelia;Streptopelia capicola                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492;436486;436489;436491;436492;8782;8825;8929;8930;36242;135634
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -p 730,8492 \
+            | csvtk pretty
+        taxid   version      change         change-value   name                    rank      lineage                                                                                                                                                                                                                                                                    lineage-taxids
+        730     2014-08-01   NEW                           Haemophilus ducreyi     species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Pasteurellales;Pasteurellaceae;Haemophilus;Haemophilus ducreyi                                                                                                                                              131567;2;1224;1236;135625;712;724;730
+        730     2015-06-01   L_CHANGE_LIN                  [Haemophilus] ducreyi   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Pasteurellales;Pasteurellaceae;Haemophilus;[Haemophilus] ducreyi                                                                                                                                            131567;2;1224;1236;135625;712;724;730
+        8492    2014-08-01   NEW                           Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
+        8492    2015-01-01   L_CHANGE_LIN                  Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
 
-- Deleted taxid were re-used, e.g., `7343`
+- Lots of taxids were deleted
+
+        $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f change -p DELETE \
+            | csvtk freq -f version \
+            | csvtk pretty
+        version      frequency
+        2014-08-01   310603
+        2014-09-01   7957
+        2014-10-01   6535
+        2014-11-01   9568
+        2014-12-01   7146
+        2015-01-01   7650
+        2015-02-01   14906
+        2015-03-01   8595
+        2015-04-01   13745
+        2015-05-01   8379
+        2015-06-01   8622
+        2015-07-01   12744
+        2015-08-01   14678
+        2015-09-01   6638
+        2015-10-01   16931
+        2015-11-01   12168
+        2015-12-01   9781
+
+- **Deleted taxid can be re-used**, e.g., `7343`
 
         $ pigz -cd taxid-changelog.csv.gz \
             | csvtk grep -f taxid -p 7343 \
@@ -75,58 +124,67 @@ Some findings based on parts of archives (2014-2015)
         $ pigz -cd taxid-changelog.csv.gz \
             | csvtk collapse -f taxid -v change -s ";" \
             | csvtk grep -f change -r -p ".*DELETE.*NEW" \
-            | wc -l 
-        17418
-
-        pigz -cd taxid-changelog.csv.gz \
+            | sed 1d | wc -l 
+        138973
+        
+        $ pigz -cd taxid-changelog.csv.gz \
             | csvtk collapse -f taxid -v change -s ";" \
             | csvtk grep -f change -r -p ".*DELETE.*NEW" \
             | csvtk freq -f change -nr \
             | csvtk pretty
-        change                                                       frequency
-        DELETE;NEW                                                   16342
-        DELETE;NEW;LINEAGE_CHANGED                                   923
-        DELETE;NEW;ABSORB                                            76
-        DELETE;NEW;MERGE                                             39
-        DELETE;NEW;LINEAGE_CHANGED;LINEAGE_CHANGED                   28
-        DELETE;NEW;ABSORB;LINEAGE_CHANGED                            7
-        DELETE;NEW;LINEAGE_CHANGED;LINEAGE_CHANGED;LINEAGE_CHANGED   1
-        DELETE;NEW;MERGE;LINEAGE_CHANGED                             1
-
-        # OMG, who changed so many times:
-        $ pigz -cd taxid-changelog.csv.gz \
-            | csvtk collapse -f taxid -v change -s ";" \
-            | csvtk grep -f change -r -p ".*DELETE.*NEW" \
-            | csvtk grep -f change -p "DELETE;NEW;LINEAGE_CHANGED;LINEAGE_CHANGED;LINEAGE_CHANGED"
-        taxid,change
-        1565341,DELETE;NEW;LINEAGE_CHANGED;LINEAGE_CHANGED;LINEAGE_CHANGED
-
-        pigz -cd taxid-changelog.csv.gz \
-            | csvtk grep -f taxid -p 1565341 \
-            | csvtk pretty
-        taxid     version      change            change-value   name                      rank      lineage                                                                                                                                                                             lineage-taxids
-        1565341   2014-11-01   DELETE                                                                                                                                                                                                                                                   
-        1565341   2014-12-01   NEW                              Cryptococcus sp.1 AM07    species   cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Tremellomycetes;Tremellales;mitosporic Tremellales;Cryptococcus;Cryptococcus sp.1 AM07        131567;2759;33154;4751;451864;5204;5302;155616;5234;34476;106841;1565341
-        1565341   2015-05-01   LINEAGE_CHANGED                  Cryptococcus sp.1 AM07    species   cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Tremellomycetes;Tremellales;Tremellales incertae sedis;Cryptococcus;Cryptococcus sp.1 AM07    131567;2759;33154;4751;451864;5204;5302;155616;5234;415703;106841;1565341
-        1565341   2015-07-01   LINEAGE_CHANGED                  Cryptococcus sp. 1 AM07   species   cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Tremellomycetes;Tremellales;Tremellales incertae sedis;Cryptococcus;Cryptococcus sp. 1 AM07   131567;2759;33154;4751;451864;5204;5302;155616;5234;415703;106841;1565341
-        1565341   2015-12-01   LINEAGE_CHANGED                  Cryptococcus sp. 1 AM07   species   cellular organisms;Eukaryota;Opisthokonta;Fungi;Dikarya;Basidiomycota;Agaricomycotina;Tremellomycetes;Tremellales;Trichosporonaceae;Cryptococcus;Cryptococcus sp. 1 AM07            131567;2759;33154;4751;451864;5204;5302;155616;5234;1759442;106841;1565341
+        change                                              frequency
+        DELETE;NEW                                          129998
+        DELETE;NEW;L_CHANGE_LEN                             5370
+        DELETE;NEW;L_CHANGE_TAX                             1409
+        DELETE;NEW;L_CHANGE_LIN                             844
+        DELETE;NEW;ABSORB                                   730
+        DELETE;NEW;MERGE                                    320
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LEN                50
+        DELETE;NEW;ABSORB;L_CHANGE_LIN                      47
+        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_LEN                39
+        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_TAX                32
+        DELETE;NEW;ABSORB;L_CHANGE_LEN                      22
+        DELETE;NEW;ABSORB;L_CHANGE_TAX                      21
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LIN                14
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LIN;L_CHANGE_LEN   12
+        DELETE;NEW;L_CHANGE_LIN;ABSORB                      12
+        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LIN                11
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_TAX                7
+        DELETE;NEW;L_CHANGE_LEN;MERGE                       6
+        DELETE;NEW;ABSORB;L_CHANGE_LIN;MERGE                3
+        DELETE;NEW;L_CHANGE_LEN;ABSORB                      3
+        DELETE;NEW;L_CHANGE_TAX;ABSORB;L_CHANGE_TAX         3
+        DELETE;NEW;L_CHANGE_TAX;MERGE                       3
+        DELETE;NEW;ABSORB;MERGE                             2
+        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_LIN                2
+        DELETE;NEW;L_CHANGE_LIN;L_CHANGE_TAX                2
+        DELETE;NEW;L_CHANGE_LIN;MERGE                       2
+        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LEN                2
+        DELETE;NEW;L_CHANGE_TAX;L_CHANGE_LIN;L_CHANGE_TAX   2
+        DELETE;NEW;ABSORB;L_CHANGE_LIN;L_CHANGE_LEN         1
+        DELETE;NEW;ABSORB;L_CHANGE_LIN;L_CHANGE_TAX         1
+        DELETE;NEW;L_CHANGE_LEN;ABSORB;L_CHANGE_LIN         1
+        DELETE;NEW;L_CHANGE_LEN;L_CHANGE_LEN;L_CHANGE_LEN   1
+        DELETE;NEW;L_CHANGE_TAX;ABSORB                      1
 
 
 to be investigated ...
         
 ## Method
 
+Data source: https://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump_archive/
+
 Dependencies:
     
 - rush, https://github.com/shenwei356/rush/
-- taxonkit, https://github.com/shenwei356/taxonkit/, version 0.4.0 or later
+- taxonkit, https://github.com/shenwei356/taxonkit/, version 0.4.1 or later
 
 Hardware:
 
 - DISK: > 15 GiB
 - RAM: > ??? (11 GiB for 17 archives)
 
-Steps
+Steps:
 
     mkdir -p archive; cd archive;
 
@@ -153,4 +211,10 @@ Steps
     cd ..
     taxonkit taxid-changelog -i archive -o taxid-changelog.csv.gz --verbose
     
+## Contributing
 
+We welcome pull requests, bug fixes and issue reports.
+
+## License
+
+[MIT License](https://github.com/shenwei356/taxid-changelog/blob/master/LICENSE)
