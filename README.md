@@ -1,6 +1,7 @@
 # taxid-changelog
 
-NCBI taxonomic identifier (taxid) changelog
+NCBI taxonomic identifier (taxid) changelog, 
+tracking taxids deletion, new adding, merge, reuse, and rank/name changes.
 
 ## Table of contents
 
@@ -12,6 +13,7 @@ NCBI taxonomic identifier (taxid) changelog
     - [Scientific names and ranks changed](#scientific-names-and-ranks-changed)
     - [Lineage taxids remained but lineage changed](#lineage-taxids-remained-but-lineage-changed)
     - [Rank changed from subspecies and species](#rank-changed-from-subspecies-and-species)
+    - [A superkingdom disappeared](#a-superkingdom-disappeared)
 - [Method](#method)
 - [Contributing](#contributing)
 - [License](#license)
@@ -463,7 +465,21 @@ Examples:
     41264   2014-12-01   CHANGE_RANK                     Gerbilliscus gambianus                   species
     41264   2014-12-01   CHANGE_LIN_LEN                  Gerbilliscus gambianus                   species
     41264   2017-04-01   CHANGE_LIN_TAX                  Gerbilliscus gambianus                   species
-        
+
+### A superkingdom disappeared
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f rank -p superkingdom \
+        | csvtk pretty 
+    taxid   version      change   change-value   name        rank           lineage                        lineage-taxids
+    2       2014-08-01   NEW                     Bacteria    superkingdom   cellular organisms;Bacteria    131567;2
+    2157    2014-08-01   NEW                     Archaea     superkingdom   cellular organisms;Archaea     131567;2157
+    2759    2014-08-01   NEW                     Eukaryota   superkingdom   cellular organisms;Eukaryota   131567;2759
+    10239   2014-08-01   NEW                     Viruses     superkingdom   Viruses                        10239
+    12884   2014-08-01   NEW                     Viroids     superkingdom   Viroids                        12884
+    12884   2019-05-01   DELETE                  Viroids     superkingdom   Viroids                        12884
+
+
 to be continue ...
         
 ## Method
