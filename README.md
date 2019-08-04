@@ -197,7 +197,7 @@ Stats:
     2019-05-01   10502     2453          4103             
     2019-06-01   8008      1458          13797            
     2019-07-01   5050      2192          6695                  
-
+    2019-08-01   6041      1611          6501
 
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -337,6 +337,7 @@ Stats:
     2019-05-01   415            580
     2019-06-01   326            293
     2019-07-01   293            37
+    2019-08-01   423            70
 
 ### Lineage taxids remained but lineage changed
   
@@ -374,7 +375,7 @@ Steps:
     # count
     $ csvtk dim t.f.txt
     file      num_cols   num_rows
-    t.f.txt          1        432 
+    t.f.txt          1        438
    
 When did these happend?
 
@@ -438,6 +439,7 @@ When did these happend?
     2019-04-01   4
     2019-05-01   5
     2019-06-01   3
+    2019-08-01   6
     
 Examples:
 
@@ -494,7 +496,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 15 GiB
-- RAM: >= 48 GiB (40 GiB for 57 archives, in 11 min)
+- RAM: >= 48 GiB (40 GiB for 58 archives, in 12 min)
 
 Steps:
 
