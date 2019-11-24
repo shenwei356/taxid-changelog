@@ -196,8 +196,11 @@ Stats:
     2019-04-01   12807     19580         11672            1
     2019-05-01   10502     2453          4103             
     2019-06-01   8008      1458          13797            
-    2019-07-01   5050      2192          6695                  
-    2019-08-01   6041      1611          6501
+    2019-07-01   5050      2192          6695             
+    2019-08-01   6041      1611          6501             
+    2019-09-01   4975      2541          5328             
+    2019-10-01   10854     32970         3497             
+    2019-11-01   10648     2025          3530
 
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -338,6 +341,9 @@ Stats:
     2019-06-01   326            293
     2019-07-01   293            37
     2019-08-01   423            70
+    2019-09-01   287            14
+    2019-10-01   465            11
+    2019-11-01   378            78
 
 ### Lineage taxids remained but lineage changed
   
@@ -375,7 +381,7 @@ Steps:
     # count
     $ csvtk dim t.f.txt
     file      num_cols   num_rows
-    t.f.txt          1        438
+    t.f.txt          1        446
    
 When did these happend?
 
@@ -440,7 +446,10 @@ When did these happend?
     2019-05-01   5
     2019-06-01   3
     2019-08-01   6
-    
+    2019-09-01   3
+    2019-10-01   1
+    2019-11-01   4
+
 Examples:
 
     $ pigz -cd taxid-changelog.csv.gz \
@@ -496,7 +505,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 15 GiB
-- RAM: >= 48 GiB (40 GiB for 58 archives, in 12 min)
+- RAM: >= 48 GiB (45 GiB for 61 archives, in 12 min)
 
 Steps:
 
