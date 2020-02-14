@@ -201,7 +201,10 @@ Stats:
     2019-09-01   4975      2541          5328             
     2019-10-01   10854     32970         3497             
     2019-11-01   10648     2025          3530
-
+    2019-12-01   11905     5727          7961             
+    2020-01-01   8928      4337          15423            
+    2020-02-01   8566      2024          8309
+    
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
 > Taxids are stable and persistent—they may be deleted
@@ -209,7 +212,7 @@ Stats:
 > and they may be merged (when taxa are synonymized), 
 > but they will never be reused to identify a different taxon.
 
-Deleted taxid can be re-used**, e.g., `1157319` was reused to identify the same taxon.
+**Deleted taxid can be re-used**, e.g., `1157319` was reused to identify the same taxon.
 
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f taxid -p 7343,1157319 \
@@ -344,6 +347,8 @@ Stats:
     2019-09-01   287            14
     2019-10-01   465            11
     2019-11-01   378            78
+    2020-01-01   497            40
+    2020-02-01   361            24
 
 ### Lineage taxids remained but lineage changed
   
@@ -381,7 +386,7 @@ Steps:
     # count
     $ csvtk dim t.f.txt
     file      num_cols   num_rows
-    t.f.txt          1        446
+    t.f.txt          1        453
    
 When did these happend?
 
@@ -449,6 +454,9 @@ When did these happend?
     2019-09-01   3
     2019-10-01   1
     2019-11-01   4
+    2019-11-01   4
+    2019-12-01   1
+    2020-02-01   6
 
 Examples:
 
@@ -523,16 +531,18 @@ Steps:
     wget $url -O - -o /dev/null \
         | grep taxdmp | perl -ne '/(taxdmp_.+?.zip)/; print "$1\n";' \
         | rush -j 2 -v url=$url 'axel -n 5 {url}/{}' \
-            --immediate-output  -c -C download.rush
+            --immediate-output  -c -C _download.rush
 
     # --------- unzip ---------
 
-    ls taxdmp*.zip | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}'
+    ls taxdmp*.zip \
+        | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}' \
+        -c -C _unzip.rush
 
     # --------- create log ---------
 
     cd ..
-    taxonkit taxid-changelog -i archive -o taxid-changelog.csv.gz --verbose
+    time taxonkit taxid-changelog -i archive -o taxid-changelog.csv.gz --verbose
     
 ## Contributing
 
