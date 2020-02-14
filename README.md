@@ -3,6 +3,8 @@
 NCBI taxonomic identifier (taxid) changelog, 
 tracking taxids deletion, new adding, merge, reuse, and rank/name changes.
 
+![changes.png](stats/changes.png)
+
 ## Table of contents
 
 <!-- TOC -->
