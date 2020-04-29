@@ -5,6 +5,9 @@
 NCBI taxonomic identifier (taxid) changelog, 
 tracking taxids deletion, new adding, merge, reuse, and rank/name changes.
 
+[Please cite](#citation): [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
+
+
 ## Table of contents
 
 <!-- TOC -->
@@ -209,6 +212,8 @@ Stats:
     2019-12-01   11905     5727          351      7961             
     2020-01-01   8928      4337          262      15423            
     2020-02-01   8566      2024          292      8309 
+    2020-03-01   5752      3051          390      3998             
+    2020-04-01   6982      2149          522      4085 
     
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -354,6 +359,8 @@ Stats:
     2019-11-01   378            78
     2020-01-01   497            40
     2020-02-01   361            24
+    2020-03-01   805            33
+    2020-04-01   572            15
 
 ### Lineage taxids remained but lineage changed
   
@@ -391,7 +398,7 @@ Steps:
     # count
     $ csvtk dim t.f.txt
     file      num_cols   num_rows
-    t.f.txt          1        453
+    t.f.txt          1        464
    
 When did these happend?
 
@@ -462,6 +469,8 @@ When did these happend?
     2019-11-01   4
     2019-12-01   1
     2020-02-01   6
+    2020-03-01   9
+    2020-04-01   2
 
 Examples:
 
