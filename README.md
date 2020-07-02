@@ -102,7 +102,8 @@ Example 3 (All subspecies and strain in *Akkermansia muciniphila* 239935)
     # species in Akkermansia
     $ taxonkit list --show-rank --show-name --ids 239935
     239935 [species] Akkermansia muciniphila
-      349741 [no rank] Akkermansia muciniphila ATCC BAA-835
+      349741 [strain] Akkermansia muciniphila ATCC BAA-835
+
     
     # check them all  
     $ pigz -cd taxid-changelog.csv.gz \
@@ -116,6 +117,7 @@ Example 3 (All subspecies and strain in *Akkermansia muciniphila* 239935)
     349741   2014-08-01   NEW                             Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Verrucomicrobiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835   131567;2;51290;74201;203494;48461;203557;239934;239935;349741
     349741   2015-05-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;Chlamydiae/Verrucomicrobia group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835       131567;2;51290;74201;203494;48461;1647988;239934;239935;349741
     349741   2016-03-01   CHANGE_LIN_TAX                  Akkermansia muciniphila ATCC BAA-835   no rank   cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
+    349741   2020-07-01   CHANGE_RANK                     Akkermansia muciniphila ATCC BAA-835   strain    cellular organisms;Bacteria;PVC group;Verrucomicrobia;Verrucomicrobiae;Verrucomicrobiales;Akkermansiaceae;Akkermansia;Akkermansia muciniphila;Akkermansia muciniphila ATCC BAA-835                              131567;2;1783257;74201;203494;48461;1647988;239934;239935;349741
 
 ## Results
 
@@ -214,6 +216,9 @@ Stats:
     2020-02-01   8566      2024          292      8309 
     2020-03-01   5752      3051          390      3998             
     2020-04-01   6982      2149          522      4085 
+    2020-05-01   6380      2277          434      7099             
+    2020-06-01   5648      3182          429      5504             
+    2020-07-01   6715      1982          366      4379
     
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -240,6 +245,7 @@ Stats:
     1157319   2019-05-01   CHANGE_LIN_LIN                  Lactococcus phage ASCC   no rank   Viruses;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage 936 sensu lato;Lactococcus phage ASCC                                                                                                                                                                                                                                                                  10239;28883;10699;1623305;2050979;354259;1157319
     1157319   2019-06-01   DELETE                          Lactococcus phage ASCC   no rank   Viruses;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage 936 sensu lato;Lactococcus phage ASCC                                                                                                                                                                                                                                                                  10239;28883;10699;1623305;2050979;354259;1157319
     1157319   2019-07-01   REUSE_DEL                       Lactococcus phage ASCC   species   Viruses;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage ASCC                                                                                                                                                                                                                                                                                                   10239;28883;10699;1623305;2050979;1157319
+    1157319   2020-06-01   CHANGE_LIN_LEN                  Lactococcus phage ASCC   species   Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage ASCC                                                                                                                                                                                                                                           10239;2731341;2731360;2731618;2731619;28883;10699;1623305;2050979;1157319
 
 Merged taxid can also be re-used (become independent again?), e.g.,
 
@@ -361,6 +367,9 @@ Stats:
     2020-02-01   361            24
     2020-03-01   805            33
     2020-04-01   572            15
+    2020-05-01   848            36
+    2020-06-01   495            775
+    2020-07-01   611            215932
 
 ### Lineage taxids remained but lineage changed
   
@@ -375,6 +384,7 @@ Because scientifics name of itself (`730`) changed, or these of part taxids with
     730     2015-06-01   CHANGE_LIN_LIN                  [Haemophilus] ducreyi   species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Pasteurellales;Pasteurellaceae;Haemophilus;[Haemophilus] ducreyi                                                                                                                                            131567;2;1224;1236;135625;712;724;730
     8492    2014-08-01   NEW                             Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Testudines + Archosauria group;Archosauria   131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
     8492    2015-01-01   CHANGE_LIN_LIN                  Archosauria             no rank   cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
+    8492    2020-07-01   CHANGE_RANK                     Archosauria             clade     cellular organisms;Eukaryota;Opisthokonta;Metazoa;Eumetazoa;Bilateria;Deuterostomia;Chordata;Craniata;Vertebrata;Gnathostomata;Teleostomi;Euteleostomi;Sarcopterygii;Dipnotetrapodomorpha;Tetrapoda;Amniota;Sauropsida;Sauria;Archelosauria;Archosauria                    131567;2759;33154;33208;6072;33213;33511;7711;89593;7742;7776;117570;117571;8287;1338369;32523;32524;8457;32561;1329799;8492
 
 ### Rank changed from subspecies and species
 
@@ -396,9 +406,8 @@ Steps:
         > t.f.txt
     
     # count
-    $ csvtk dim t.f.txt
-    file      num_cols   num_rows
-    t.f.txt          1        464
+    $ csvtk nrow t.f.txt
+    645
    
 When did these happend?
 
