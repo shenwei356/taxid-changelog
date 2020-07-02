@@ -370,6 +370,32 @@ Stats:
     2020-05-01   848            36
     2020-06-01   495            775
     2020-07-01   611            215932
+    
+What happend at 2020-07-01?
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f version -p 2020-07-01 \
+        | csvtk grep -f change -p CHANGE_RANK \
+        | csvtk freq -f rank -nr \
+        | csvtk pretty
+        
+    rank              frequency
+    isolate           111108
+    strain            101971
+    serotype          1144
+    clade             822
+    forma specialis   740
+    serogroup         71
+    genotype          20
+    biotype           17
+    species           14
+    morph             11
+    pathogroup        5
+    subvariety        5
+    family            1
+    genus             1
+    subgenus          1
+    tribe             1
 
 ### Lineage taxids remained but lineage changed
   
