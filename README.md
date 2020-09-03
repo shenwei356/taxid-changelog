@@ -71,7 +71,21 @@ Example 1:
     8,2014-08-01,DELETE,,,,,
     9,2014-08-01,NEW,,Buchnera aphidicola,species,cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Buchnera;Buchnera aphidicola,131567;2;1224;1236;91347;543;32199;9
 
-Example 2 (*E.coli* with taxid `562`)
+Example 2 (SARS-CoV-2)
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -p 2697049 \
+        | csvtk pretty
+    taxid     version      change           change-value   name                                              rank      lineage                                                                                                                                                                                                                                                        lineage-taxids
+    2697049   2020-02-01   NEW                             Wuhan seafood market pneumonia virus              species   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;unclassified Betacoronavirus;Wuhan seafood market pneumonia virus                                                                                               10239;2559587;76804;2499399;11118;2501931;694002;696098;2697049
+    2697049   2020-03-01   CHANGE_NAME                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    2697049   2020-03-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    2697049   2020-03-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2                                              10239;2559587;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    2697049   2020-06-01   CHANGE_LIN_LEN                  Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    2697049   2020-07-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   isolate   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    2697049   2020-08-01   CHANGE_RANK                     Severe acute respiratory syndrome coronavirus 2   no rank   Viruses;Riboviria;Orthornavirae;Pisuviricota;Pisoniviricetes;Nidovirales;Cornidovirineae;Coronaviridae;Orthocoronavirinae;Betacoronavirus;Sarbecovirus;Severe acute respiratory syndrome-related coronavirus;Severe acute respiratory syndrome coronavirus 2   10239;2559587;2732396;2732408;2732506;76804;2499399;11118;2501931;694002;2509511;694009;2697049
+    
+Example 3 (*E.coli* with taxid `562`)
 
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f taxid -p 562 \
@@ -97,7 +111,7 @@ Example 2 (*E.coli* with taxid `562`)
     1637691   2015-05-01   REUSE_DEL                       Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
     1637691   2015-11-01   MERGE            562            Escherichia sp. MAR         species   cellular organisms;Bacteria;Proteobacteria;Gammaproteobacteria;Enterobacteriales;Enterobacteriaceae;Escherichia;Escherichia sp. MAR         131567;2;1224;1236;91347;543;561;1637691
 
-Example 3 (All subspecies and strain in *Akkermansia muciniphila* 239935)
+Example 4 (All subspecies and strain in *Akkermansia muciniphila* 239935)
 
     # species in Akkermansia
     $ taxonkit list --show-rank --show-name --ids 239935
@@ -418,8 +432,52 @@ What happend at 2020-08-01?
     subgenus     3
     varietas     3
     family       1
+    
+Well, lots of "isolate" and "strain" are changed back to "no rank" again.
 
+    # taxid with rank changed to "no rank" at 2020-08-01
+    pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f version -p 2020-08-01 \
+        | csvtk grep -f rank -p "no rank" \
+        | csvtk cut -f taxid \
+        > norank-2020-08.taxid
 
+    # ranks before 2020-07-01
+    pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -P norank-2020-08.taxid \
+            | csvtk grep -f version -p 2020-07-01 -p 2020-08-01 -p 2020-09-01 -v \
+            | csvtk cut -f taxid,version,rank \
+            | csvtk sort -k taxid:n -k version:r \
+            | csvtk uniq -f taxid \
+            > norank-2020-08.taxid.before-2020-07.csv
+
+    # ranks at 2020-07-01
+    pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -P norank-2020-08.taxid \
+            | csvtk grep -f version -p 2020-07-01 \
+            | csvtk cut -f taxid,version,rank \
+            > norank-2020-08.taxid.2020-07.csv
+
+    # join  
+    csvtk join --outer-join -f taxid norank-2020-08.taxid.before-2020-07.csv norank-2020-08.taxid.2020-07.csv \
+        | csvtk rename -f 3 -n 2020.06 \
+        | csvtk rename -f 5 -n 2020.07 \
+        | csvtk mutate2 -n 2020.08 -e '"no rank"' \
+        | csvtk freq -f 2020.06,2020.07,2020.08 -nr \
+        | csvtk pretty        
+    2020.06   2020.07    2020.08   frequency
+    no rank   isolate    no rank   11067
+    no rank   strain     no rank   9080
+    species   isolate    no rank   45
+    no rank   serotype   no rank   29
+    no rank              no rank   11
+    no rank   no rank    no rank   7
+    species              no rank   3
+    species   species    no rank   2
+                         no rank   1
+    
+
+    
 ### Lineage taxids remained but lineage changed
   
 Because scientifics name of itself (`730`) changed, or these of part taxids with higher ranks (`8492`).
