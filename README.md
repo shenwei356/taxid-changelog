@@ -390,7 +390,7 @@ Stats:
     2020-09-01   748            34
 
     
-What happend at 2020-07-01?
+What happend on 2020-07-01?
 
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f version -p 2020-07-01 \
@@ -416,7 +416,55 @@ What happend at 2020-07-01?
     subgenus          1
     tribe             1
     
-What happend at 2020-08-01?
+    # where are the from
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f version -p 2020-07-01 \
+        | csvtk grep -f change -p CHANGE_RANK \
+        | csvtk cut -f taxid \
+        > rank-changed-2020-07.taxid
+    # ranks before 2020-07-01
+    pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -P rank-changed-2020-07.taxid \
+            | csvtk grep -f version -p 2020-07-01 -p 2020-08-01 -p 2020-09-01 -v \
+            | csvtk cut -f taxid,version,rank \
+            | csvtk sort -k taxid:n -k version:r \
+            | csvtk uniq -f taxid \
+            > rank-changed-2020-07.taxid.before-2020-07.csv
+    # ranks on 2020-07-01
+    $ pigz -cd taxid-changelog.csv.gz \
+            | csvtk grep -f taxid -P rank-changed-2020-07.taxid \
+            | csvtk grep -f version -p 2020-07-01 \
+            | csvtk cut -f taxid,version,rank \
+            > rank-changed-2020-07.taxid.2020-07.csv
+    # join
+    $ csvtk join --outer-join -f taxid rank-changed-2020-07.taxid.before-2020-07.csv rank-changed-2020-07.taxid.2020-07.csv \
+        | csvtk rename -f 3 -n "<2020.07" \
+        | csvtk rename -f 5 -n 2020.07 \
+        | csvtk freq -f "<2020.07,2020.07" -nr \
+        | csvtk pretty
+    <2020.07     2020.07           frequency
+    no rank      isolate           110937
+    no rank      strain            102294
+    no rank      serotype          1144
+    no rank      clade             939
+    no rank      forma specialis   759
+    species      isolate           663
+    no rank      serogroup         71
+    no rank      genotype          20
+    no rank      biotype           17
+    no rank      species           14
+    no rank      morph             11
+    subspecies   species           11
+    no rank      pathogroup        5
+    no rank      subvariety        5
+    species      strain            3
+    subfamily    family            3
+    subfamily    tribe             3
+    varietas     species           3
+    genus        subgenus          2
+    subgenus     genus             2
+    
+What happend on 2020-08-01?
 
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f version -p 2020-08-01 \
@@ -435,15 +483,15 @@ What happend at 2020-08-01?
     
 Well, lots of "isolate" and "strain" are changed back to "no rank" again.
 
-    # taxid with rank changed to "no rank" at 2020-08-01
-    pigz -cd taxid-changelog.csv.gz \
+    # taxid with rank changed to "no rank" on 2020-08-01
+    $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f version -p 2020-08-01 \
         | csvtk grep -f rank -p "no rank" \
         | csvtk cut -f taxid \
         > norank-2020-08.taxid
 
     # ranks before 2020-07-01
-    pigz -cd taxid-changelog.csv.gz \
+    $ pigz -cd taxid-changelog.csv.gz \
             | csvtk grep -f taxid -P norank-2020-08.taxid \
             | csvtk grep -f version -p 2020-07-01 -p 2020-08-01 -p 2020-09-01 -v \
             | csvtk cut -f taxid,version,rank \
@@ -451,32 +499,33 @@ Well, lots of "isolate" and "strain" are changed back to "no rank" again.
             | csvtk uniq -f taxid \
             > norank-2020-08.taxid.before-2020-07.csv
 
-    # ranks at 2020-07-01
-    pigz -cd taxid-changelog.csv.gz \
+    # ranks on 2020-07-01
+    $ pigz -cd taxid-changelog.csv.gz \
             | csvtk grep -f taxid -P norank-2020-08.taxid \
             | csvtk grep -f version -p 2020-07-01 \
             | csvtk cut -f taxid,version,rank \
             > norank-2020-08.taxid.2020-07.csv
 
     # join  
-    csvtk join --outer-join -f taxid norank-2020-08.taxid.before-2020-07.csv norank-2020-08.taxid.2020-07.csv \
-        | csvtk rename -f 3 -n 2020.06 \
+    $ csvtk join --outer-join -f taxid norank-2020-08.taxid.before-2020-07.csv norank-2020-08.taxid.2020-07.csv \
+        | csvtk rename -f 3 -n "<2020.07" \
         | csvtk rename -f 5 -n 2020.07 \
         | csvtk mutate2 -n 2020.08 -e '"no rank"' \
-        | csvtk freq -f 2020.06,2020.07,2020.08 -nr \
+        | csvtk freq -f "<2020.07,2020.07,2020.08" -nr \
         | csvtk pretty        
-    2020.06   2020.07    2020.08   frequency
-    no rank   isolate    no rank   11067
-    no rank   strain     no rank   9080
-    species   isolate    no rank   45
-    no rank   serotype   no rank   29
-    no rank              no rank   11
-    no rank   no rank    no rank   7
-    species              no rank   3
-    species   species    no rank   2
-                         no rank   1
-    
-
+    <2020.07   2020.07    2020.08   frequency
+    no rank    isolate    no rank   109585
+    no rank    strain     no rank   57724
+    species    isolate    no rank   660
+                          no rank   198
+    no rank               no rank   186
+    species               no rank   59
+    no rank    serotype   no rank   52
+               isolate    no rank   18
+    no rank    no rank    no rank   9
+    species    species    no rank   3
+               no rank    no rank   2
+    species    strain     no rank   2
     
 ### Lineage taxids remained but lineage changed
   
