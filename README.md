@@ -219,6 +219,8 @@ Stats:
     2020-05-01   6380      2277          434      7099             
     2020-06-01   5648      3182          429      5504             
     2020-07-01   6715      1982          366      4379
+    2020-08-01   8667      2053          632      4155             
+    2020-09-01   7135      1457          325      5425  
     
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -370,6 +372,9 @@ Stats:
     2020-05-01   848            36
     2020-06-01   495            775
     2020-07-01   611            215932
+    2020-08-01   631            167799
+    2020-09-01   748            34
+
     
 What happend at 2020-07-01?
 
@@ -396,6 +401,24 @@ What happend at 2020-07-01?
     genus             1
     subgenus          1
     tribe             1
+    
+What happend at 2020-08-01?
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f version -p 2020-08-01 \
+        | csvtk grep -f change -p CHANGE_RANK \
+        | csvtk freq -f rank -nr \
+        | csvtk pretty
+    rank         frequency
+    no rank      167603
+    serotype     106
+    clade        59
+    species      15
+    subspecies   9
+    subgenus     3
+    varietas     3
+    family       1
+
 
 ### Lineage taxids remained but lineage changed
   
@@ -433,7 +456,7 @@ Steps:
     
     # count
     $ csvtk nrow t.f.txt
-    645
+    651
    
 When did these happend?
 
@@ -506,6 +529,11 @@ When did these happend?
     2020-02-01   6
     2020-03-01   9
     2020-04-01   2
+    2020-05-01   6
+    2020-06-01   170
+    2020-07-01   5
+    2020-08-01   5
+    2020-09-01   1
 
 Examples:
 
