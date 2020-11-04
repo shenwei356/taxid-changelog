@@ -234,7 +234,9 @@ Stats:
     2020-06-01   5648      3182          429      5504             
     2020-07-01   6715      1982          366      4379
     2020-08-01   8667      2053          632      4155             
-    2020-09-01   7135      1457          325      5425  
+    2020-09-01   7135      1457          325      5425
+    2020-10-01   6091      2567          346      6654             
+    2020-11-01   5126      1479          365      4754 
     
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -388,6 +390,8 @@ Stats:
     2020-07-01   611            215932
     2020-08-01   631            167799
     2020-09-01   748            34
+    2020-10-01   1206           42
+    2020-11-01   610            126
 
     
 What happend on 2020-07-01?
@@ -416,7 +420,7 @@ What happend on 2020-07-01?
     subgenus          1
     tribe             1
     
-    # where are the from
+    # where are they from
     $ pigz -cd taxid-changelog.csv.gz \
         | csvtk grep -f version -p 2020-07-01 \
         | csvtk grep -f change -p CHANGE_RANK \
@@ -641,6 +645,8 @@ When did these happend?
     2020-07-01   5
     2020-08-01   5
     2020-09-01   1
+    2020-10-01   7
+    2020-11-01   8
 
 Examples:
 
