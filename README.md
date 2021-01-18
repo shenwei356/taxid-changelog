@@ -2,8 +2,8 @@
 
 # taxid-changelog
 
-NCBI taxonomic identifier (taxid) changelog, 
-tracking taxids deletion, new adding, merge, reuse, and rank/name changes.
+NCBI taxonomic identifier (taxIDs) changelog, 
+tracking taxIDs deletion, new adding, merge, reuse, and rank/name changes.
 
 [Please cite](#citation): [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
 
@@ -14,9 +14,9 @@ tracking taxids deletion, new adding, merge, reuse, and rank/name changes.
 - [Download](#download)
 - [Format](#format)
 - [Results](#results)
-    - [Taxids were deleted, newly added and re-used](#taxids-were-deleted-newly-added-and-re-used)
+    - [TaxIDs were deleted, newly added and re-used](#taxids-were-deleted-newly-added-and-re-used)
     - [Scientific names and ranks changed](#scientific-names-and-ranks-changed)
-    - [Lineage taxids remained but lineage changed](#lineage-taxids-remained-but-lineage-changed)
+    - [Lineage TaxIDs remained but lineage changed](#lineage-taxids-remained-but-lineage-changed)
     - [Rank changed from subspecies and species](#rank-changed-from-subspecies-and-species)
     - [A superkingdom disappeared](#a-superkingdom-disappeared)
 - [Method](#method)
@@ -703,7 +703,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 15 GiB
-- RAM: >= 48 GiB (45 GiB for 61 archives, in 12 min)
+- RAM: >= 48 GiB (43.5 GiB for 75 archives, in 11 min)
 
 Steps:
 
