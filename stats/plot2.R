@@ -35,15 +35,11 @@ p <- ggplot(df, aes(x = date, y = count, color = types)) +
   xlab("Date") +
   ylab("#TaxIDs") +
   shenwei356.theme() +
-  theme1 +
-  labs(title = "NCBI Taxonomy TaxID Changes",
-    subtitle = "2014-08-01 ~ 2021-01-01",
-    caption = "https://github.com/shenwei356/taxid-changelog"
-  )
+  theme1
 
 ggsave(
   p,
-  file = "changes.png",
+  file = "changes2.png",
   width = 10,
   height = 4,
   dpi = 300
