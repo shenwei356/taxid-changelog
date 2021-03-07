@@ -237,6 +237,10 @@ Stats:
     2020-09-01   7135      1457          325      5425
     2020-10-01   6091      2567          346      6654             
     2020-11-01   5126      1479          365      4754 
+    2020-12-01   5726      3696          358      4986             
+    2021-01-01   5506      1661          472      3561             
+    2021-02-01   4320      2260          559      6528             
+    2021-03-01   7015      1395          400      5145
     
 [The paper of NCBI Taxonomy database](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245000/):
 
@@ -392,8 +396,11 @@ Stats:
     2020-09-01   748            34
     2020-10-01   1206           42
     2020-11-01   610            126
-
-    
+    2020-12-01   566            84
+    2021-01-01   983            48
+    2021-02-01   1931           51
+    2021-03-01   1327           50
+        
 What happend on 2020-07-01?
 
     $ pigz -cd taxid-changelog.csv.gz \
@@ -703,7 +710,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 15 GiB
-- RAM: >= 48 GiB (43.5 GiB for 75 archives, in 11 min)
+- RAM: >= 48 GiB (43.5 GiB for 77 archives, in 12 min)
 
 Steps:
 
