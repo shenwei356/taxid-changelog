@@ -5,7 +5,7 @@
 NCBI taxonomic identifier (taxIDs) changelog, 
 tracking taxIDs deletion, new adding, merge, reuse, and rank/name changes.
 
-[Please cite](#citation): [![doi](https://img.shields.io/badge/doi-10.1101%2F513523-blue.svg?style=flat)](https://doi.org/10.1101/513523)
+**[Please cite](#citation):** [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
 
 
 ## Table of contents
@@ -20,6 +20,7 @@ tracking taxIDs deletion, new adding, merge, reuse, and rank/name changes.
     - [Rank changed from subspecies and species](#rank-changed-from-subspecies-and-species)
     - [A superkingdom disappeared](#a-superkingdom-disappeared)
 - [Method](#method)
+- [Citation](#citation)
 - [Contributing](#contributing)
 - [License](#license)
 <!-- /TOC -->
@@ -740,7 +741,12 @@ Steps:
 
     cd ..
     time taxonkit taxid-changelog -i archive -o taxid-changelog.csv.gz --verbose
-    
+
+## Citation
+
+> Shen, W., Ren, H., TaxonKit: a practical and efficient NCBI Taxonomy toolkit,
+> Journal of Genetics and Genomics, [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
+
 ## Contributing
 
 We welcome pull requests, bug fixes and issue reports.
