@@ -714,7 +714,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 15 GiB
-- RAM: >= 48 GiB (43.5 GiB for 77 archives, in 12 min)
+- RAM: >= 48 GiB (43.5 GiB for 82 archives, in 12min45s)
 
 Steps:
 

@@ -37,7 +37,7 @@ p <- ggplot(df, aes(x = date, y = count, color = types)) +
   shenwei356.theme() +
   theme1 +
   labs(title = "NCBI Taxonomy TaxID Changes",
-    subtitle = "2014-08-01 ~ 2021-06-01",
+    subtitle = "2014-08-01 ~ 2021-08-01",
     caption = "https://github.com/shenwei356/taxid-changelog"
   )
 
