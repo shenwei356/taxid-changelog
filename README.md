@@ -273,6 +273,26 @@ Stats:
     1157319   2019-07-01   REUSE_DEL                       Lactococcus phage ASCC   species   Viruses;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage ASCC                                                                                                                                                                                                                                                                                                   10239;28883;10699;1623305;2050979;1157319
     1157319   2020-06-01   CHANGE_LIN_LEN                  Lactococcus phage ASCC   species   Viruses;Duplodnaviria;Heunggongvirae;Uroviricota;Caudoviricetes;Caudovirales;Siphoviridae;Skunavirus;unclassified Skunavirus;Lactococcus phage ASCC                                                                                                                                                                                                                                           10239;2731341;2731360;2731618;2731619;28883;10699;1623305;2050979;1157319
 
+The full list:
+
+    $ pigz -cd taxid-changelog.csv.gz \
+        | grep REUSE_DEL \
+        | csvtk cut -f 1 \
+        > reuse_del.txt
+    
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -P reuse_del.txt \
+        | csvtk fold -f taxid -v change \
+        | csvtk grep -f change -r -p ^DELETE -v \
+        | csvtk cut -f taxid \
+        > reuse_del.afterAug2014.txt
+        
+    $ pigz -cd taxid-changelog.csv.gz \
+        | csvtk grep -f taxid -P reuse_del.afterAug2014.txt \
+        > reuse_del.afterAug2014.txt.detail
+
+Don't worry, reused taxIDs are assigned to the same taxon.
+    
 Merged taxid can also be re-used (become independent again?), e.g.,
 
     $ pigz -cd taxid-changelog.csv.gz \
