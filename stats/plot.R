@@ -30,7 +30,7 @@ df <- read.csv("changes.g.csv")
 df$types <- factor(df$types, levels = unique(df$types), ordered = TRUE)
 df$date <- as.Date(parse_date_time(df$version, "%y-%m-%d"))
 
-df <- df %>% filter(!is.na(count)) %>% filter(version != "2014-08-01")
+df <- df %>% filter(!is.na(count)) %>% filter(version != "2013-02-21")
 
 p <- ggplot(df, aes(x = date, y = count, color = types, shape = types)) +
   geom_line(size = 0.7, alpha = 0.7) +
@@ -40,7 +40,7 @@ p <- ggplot(df, aes(x = date, y = count, color = types, shape = types)) +
   ylab("#TaxIds") + 
   theme1 +
   labs(title = "NCBI Taxonomy TaxID Changes",
-    subtitle = "2014-08-01 ~ 2022-03-01",
+    subtitle = "2013-02-21 ~ 2022-03-01",
     caption = "https://github.com/shenwei356/taxid-changelog"
   )
 
