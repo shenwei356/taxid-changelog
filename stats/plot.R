@@ -40,7 +40,7 @@ p <- ggplot(df, aes(x = date, y = count, color = types, shape = types)) +
   ylab("#TaxIds") + 
   theme1 +
   labs(title = "NCBI Taxonomy TaxID Changes",
-    subtitle = "2013-02-21 ~ 2022-03-01",
+    subtitle = "2013-02-21 ~ 2022-08-01",
     caption = "https://github.com/shenwei356/taxid-changelog"
   )
 
