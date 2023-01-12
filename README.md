@@ -5,7 +5,7 @@
 NCBI taxonomic identifier (taxIDs) changelog, 
 tracking taxIDs deletion, new adding, merge, reuse, and rank/name changes.
 
-**[Please cite](#citation):** [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
+Please cite [TaxonKit](https://github.com/shenwei356/taxonkit): [https://doi.org/10.1016/j.jgg.2021.03.006](https://www.sciencedirect.com/science/article/pii/S1673852721000837)
 
 
 ## Table of contents
