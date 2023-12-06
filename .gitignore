@@ -1,3 +1,4 @@
 *.csv.gz
 taxdump.tar.gz
 *.directory
+.Rhistory

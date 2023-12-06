@@ -733,8 +733,8 @@ Dependencies:
 
 Hardware requirements:
 
-- DISK: > 15 GiB
-- RAM: >= 48 GiB (48.7 GiB for 85 archives, in 12min39s)
+- DISK: > 30 GiB
+- RAM: >= 100 GiB (68 GiB for 110 archives, in 25min, 2023/12/01)
 
 Steps:
 
@@ -758,7 +758,10 @@ Steps:
 
     ls taxdmp*.zip \
         | rush -j 1 'unzip {} names.dmp nodes.dmp merged.dmp delnodes.dmp -d {@_(.+)\.}' \
-        -c -C _unzip.rush
+        -c -C _unzip.rush --eta
+
+    # optionally compress .dmp files with pigz, for saving disk space
+    fd .dmp$ | rush -j 4 'pigz {} --eta
 
     # --------- create log ---------
 
