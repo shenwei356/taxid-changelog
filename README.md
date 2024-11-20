@@ -734,7 +734,7 @@ Dependencies:
 Hardware requirements:
 
 - DISK: > 30 GiB
-- RAM: >= 100 GiB (68 GiB for 110 archives, in 25min, 2023/12/01)
+- RAM: >= 100 GiB (75 GiB for 125 archives, in 32min, 2024/11/01)
 
 Steps:
 
@@ -761,7 +761,7 @@ Steps:
         -c -C _unzip.rush --eta
 
     # optionally compress .dmp files with pigz, for saving disk space
-    fd .dmp$ | rush -j 4 'pigz {} --eta
+    fd .dmp$ | rush -j 4 'pigz {}' --eta
 
     # --------- create log ---------
 
