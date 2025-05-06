@@ -1,4 +1,5 @@
 *.csv.gz
+*.md5.txt
 taxdump.tar.gz
 *.directory
 .Rhistory
