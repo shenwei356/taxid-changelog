@@ -15,6 +15,7 @@ theme1 <- theme(
     legend.spacing.x = unit(0.4, "cm"),
     legend.text = element_text(size = 11),
     legend.margin = margin(0.1, 0.1, 0.1, 0.1, unit = "cm"),
+    legend.title = element_text(size = 12, margin = margin(r = 20)),
 
     plot.title = element_text(size = 15),
     text = element_text(size = 10),
@@ -41,8 +42,10 @@ p <- ggplot(df, aes(x = date, y = count, color = types, shape = types)) +
   ylab("#TaxIds") +
   theme1 +
   labs(title = "NCBI Taxonomy TaxID Changes",
-    subtitle = "2014-08-01 ~ 2025-05-01",
-    caption = "https://github.com/shenwei356/taxid-changelog"
+    subtitle = "2014-08-01 ~ 2026-05-01",
+    caption = "https://github.com/shenwei356/taxid-changelog",
+    color = "Change types",
+    shape = "Change types",
   )
 
 ggsave(
